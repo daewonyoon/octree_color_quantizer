@@ -16,7 +16,7 @@ class OctreeNode(object):
         self.color = Color(0, 0, 0)
         self.pixel_count = 0
         self.palette_index = 0
-        self.children = [None for _ in xrange(8)]
+        self.children = [None for _ in range(8)]
         # add node to current level
         if level < OctreeQuantizer.MAX_DEPTH - 1:
             parent.add_level_node(level, self)
@@ -32,7 +32,7 @@ class OctreeNode(object):
         Get all leaf nodes
         """
         leaf_nodes = []
-        for i in xrange(8):
+        for i in range(8):
             node = self.children[i]
             if node:
                 if node.is_leaf():
@@ -46,7 +46,7 @@ class OctreeNode(object):
         Get a sum of pixel count for node and its children
         """
         sum_count = self.pixel_count
-        for i in xrange(8):
+        for i in range(8):
             node = self.children[i]
             if node:
                 sum_count += node.pixel_count
@@ -79,7 +79,7 @@ class OctreeNode(object):
             return self.children[index].get_palette_index(color, level + 1)
         else:
             # get palette index for a first found child node
-            for i in xrange(8):
+            for i in range(8):
                 if self.children[i]:
                     return self.children[i].get_palette_index(color, level + 1)
 
@@ -89,7 +89,7 @@ class OctreeNode(object):
         Return the number of removed leaves
         """
         result = 0
-        for i in xrange(8):
+        for i in range(8):
             node = self.children[i]
             if node:
                 self.color.red += node.color.red
@@ -118,9 +118,9 @@ class OctreeNode(object):
         Get average color
         """
         return Color(
-            self.color.red / self.pixel_count,
-            self.color.green / self.pixel_count,
-            self.color.blue / self.pixel_count)
+            self.color.red // self.pixel_count,
+            self.color.green // self.pixel_count,
+            self.color.blue // self.pixel_count)
 
 
 class OctreeQuantizer(object):
@@ -135,7 +135,7 @@ class OctreeQuantizer(object):
         """
         Init Octree Quantizer
         """
-        self.levels = {i: [] for i in xrange(OctreeQuantizer.MAX_DEPTH)}
+        self.levels = {i: [] for i in range(OctreeQuantizer.MAX_DEPTH)}
         self.root = OctreeNode(0, self)
 
     def get_leaves(self):
@@ -167,7 +167,7 @@ class OctreeQuantizer(object):
         # reduce nodes
         # up to 8 leaves can be reduced here and the palette will have
         # only 248 colors (in worst case) instead of expected 256 colors
-        for level in xrange(OctreeQuantizer.MAX_DEPTH - 1, -1, -1):
+        for level in range(OctreeQuantizer.MAX_DEPTH - 1, -1, -1):
             if self.levels[level]:
                 for node in self.levels[level]:
                     leaf_count -= node.remove_leaves()
